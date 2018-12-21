@@ -1,8 +1,11 @@
 <?php
 	error_reporting(~E_ALL);
 	require("dbconnect.php");
-	$query = "INSERT INTO MMR_BRIEF_PROJECT (PROJTITLE , PRJ_FRM , PRJ_TO , PRJ_STATUS)
-				VALUES 	('".$_GET['pname']."' , '".$_GET['frm_date']."' , '".$_GET['t_date']."' , '".$_GET['prj_stus']."')";
+	
+	$consultant = implode(",",$_GET['sel_con']);
+	
+	$query = "INSERT INTO MMR_BRIEF_PROJECT (PROJTITLE , PRJ_FRM , PRJ_TO , PRJ_STATUS,CLIENT_ID,CON_ID,budget)
+				VALUES 	('".$_GET['pname']."' , '".$_GET['frm_date']."' , '".$_GET['t_date']."' , '".$_GET['prj_stus']."','".$_GET['sel_client']."','".$consultant."','"$_GET['budget']"' )";
 	 
 	 $compiled = oci_parse($db, $query);
 	 $stid = oci_execute($compiled);

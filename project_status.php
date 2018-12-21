@@ -3,14 +3,18 @@
 .dropdown1 dt {
   margin: 0px;
   padding: 0px;
+  border: 1px solid grey;
+  
 }
 
 .dropdown1 ul {
   margin: -1px 0 0 0;
+  
 }
 
 .dropdown1 dd {
   position: relative;
+   
 }
 
 .dropdown1 a,
@@ -28,8 +32,7 @@
   border: 2px outset;
   border-radius: 3px;
   display: block;
-  min-height: 25px;
-  line-height: 35px;
+  
   overflow: hidden;
   border: 0;
   width: 300px;
@@ -39,18 +42,17 @@
 .multiSel span {
   cursor: pointer;
   display: inline-block;
-  padding: 0 3px 2px 0;
+  padding: 0 0px 0px 0;
 }
 
 .dropdown1 dd ul {
 	 background: linear-gradient(to bottom, #ffffff 11%, #99ccff 104%);
- /* background-color: #e6e6e6;*/
   border: 2px inset;
-  border-radius: 3px;
+  border-radius: 2px;
   color: #000;
   display: none;
   left: 0px;
-  padding: 2px 15px 2px 5px;
+  padding: 2px 12px 2px 5px;
   position: absolute;
    font-family:times new roman;
   width: 650px;
@@ -77,29 +79,19 @@
                 <div class="col-xl-12 col-lg-12 tm-md-12 tm-sm-12 tm-col">
                     <div class="bg-white tm-block h-100">
                         <div class="row">
-						
-						 <div class="col-sm-3"> 
+						 <div > 
 								<table width="100%" valign="top">
 								 <tr>
-									<td>
-                                    <input placeholder="From Date"  id="from_date" name="from_date" type="text" class="form-control validate col-xl-9 col-lg-8 col-md-8 col-sm-7"
+									<td valign="top">
+										<input type="checkbox" name="prj_dt" class="prj_dt" value="prj_comp"> 
+									
+                                    <input disabled placeholder="From Date" style="line-height:2.6" id="from_date" name="from_date" type="text"
+                                        data-large-mode="true">
+									
+									<input disabled placeholder="To Date" style="line-height:2.6" id="to_date" name="to_date" type="text" 
                                         data-large-mode="true">
 									</td>
-									</td>
-									<td>
 									
-									
-									<input placeholder="To Date"  id="to_date" name="to_date" type="text" class="form-control validate col-xl-9 col-lg-8 col-md-8 col-sm-7"
-                                        data-large-mode="true">
-									</td>
-									</tr>
-								 </table>
-							</div>
-						 
-                            <div class="col-sm-3">
-                                <!-- <h2 class="tm-block-title d-inline-block">Search Project Date : </h2>-->
-								 <table width="100%" valign="top">
-								 <tr>
 									<!--<select multiple="multiple" class="custom-select col-xl-6 col-lg-8 col-md-8 col-sm-7" id="category">
                                         <option value="1" selected="">Project List</option>
                                         <option value="2">Const of Shabozai (N-70) to Drug Taunsa (N-55) Rd (Pkg-I & II)-68 Km</option>
@@ -107,7 +99,6 @@
                                     </select>-->
 									<td valign="top">
 									<dl class="dropdown1"> 
-  
 										<dt>
 										<a href="#">
 										  <span class="hida"><h6>Please Select Projects</h6></span>    
@@ -130,7 +121,7 @@
 															<input id="chk_prj" type="checkbox" value="<?php echo $row[0];?>" /><?php echo $row[1];?>
 														</li>
 													<?php 
-														}
+														}oci_close($db); 	
 													?>
 												
 												</ul>
@@ -141,25 +132,20 @@
 									
 									</td>
 									
+									
+										<td valign="top">
+											<input type='radio' name='group' ng-model='mValue' value='AW' />Actual Work <br />
+											<input type='radio' name='group' ng-model='mValue' value='VW' />Vetted Work
+										</td>
+										<td valign="top">
+											<button type="button" id="btn_search" class="btn btn-primary">Search Projects</button>
+										 </td>
 									 </tr>
-									 </table>
-								
-								
-                            </div>
-							
-							<div class="col-sm-3">
-								 <table width="100%" valign="top">
-									<tr>
-									<td valign="top">
-										<input type='radio' name='group' ng-model='mValue' value='AW' />Actual Work <br />
-										<input type='radio' name='group' ng-model='mValue' value='VW' />Vetted Work
-									</td>
-									<td valign="top">
-										<button type="button" id="btn_search" class="btn btn-primary">Search Projects</button>
-									 </td>
-									 </tr>
-							 </table>
+									
+								 </table>
 							</div>
+						 
+                  
 							
                             
                         </div>
@@ -224,11 +210,98 @@
 	
 	<script>
         $(function () {
-            $('#from_date').datepicker({ dateFormat: 'dd/mm/yy' });
+            $('#from_date').datepicker({ 
+			changeMonth: true,
+			changeYear: true,
+			showButtonPanel: true,
+			dateFormat: 'mm/yy',
+			onClose: function(dateText, inst) {
+									 									
+								 $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
+								$(".ui-datepicker-calendar").hide();
+								//$(".ui-datepicker-month").hide();
+								$(".ui-datepicker-prev").hide();
+								$(".ui-datepicker-next").hide();
+								$(".ui-datepicker-current").hide(); 
+								
+								}
+			});
+			
+			$("#from_date").focus(function () {
+							$(".ui-datepicker-calendar").hide();
+							//$(".ui-datepicker-month").hide();
+							$(".ui-datepicker-prev").hide();
+							$(".ui-datepicker-next").hide();
+							$(".ui-datepicker-current").hide();
+						});
+						
+					   $("#from_date").blur(function () {
+							$(".ui-datepicker-calendar").hide();
+							//$(".ui-datepicker-month").hide();
+							$(".ui-datepicker-prev").hide();
+							$(".ui-datepicker-next").hide();
+							$(".ui-datepicker-current").hide();
+						});
+						
+						var enforceModalFocusFn = $.fn.modal.Constructor.prototype.enforceFocus;
+						$.fn.modal.Constructor.prototype.enforceFocus = function() {};
         });
+		
+		
 		$(function () {
-            $('#to_date').datepicker({ dateFormat: 'dd/mm/yy' });
+            $('#to_date').datepicker({ changeMonth: true,
+			changeYear: true,
+			showButtonPanel: true,
+			dateFormat: 'mm/yy',
+			onClose: function(dateText, inst) {
+									 									
+								 $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
+								$(".ui-datepicker-calendar").hide();
+								//$(".ui-datepicker-month").hide();
+								$(".ui-datepicker-prev").hide();
+								$(".ui-datepicker-next").hide();
+								$(".ui-datepicker-current").hide(); 
+								
+								}
+			});
+			
+			$("#to_date").focus(function () {
+							$(".ui-datepicker-calendar").hide();
+							//$(".ui-datepicker-month").hide();
+							$(".ui-datepicker-prev").hide();
+							$(".ui-datepicker-next").hide();
+							$(".ui-datepicker-current").hide();
+						});
+						
+					   $("#to_date").blur(function () {
+							$(".ui-datepicker-calendar").hide();
+							//$(".ui-datepicker-month").hide();
+							$(".ui-datepicker-prev").hide();
+							$(".ui-datepicker-next").hide();
+							$(".ui-datepicker-current").hide();
+						});
+						
+						var enforceModalFocusFn = $.fn.modal.Constructor.prototype.enforceFocus;
+						$.fn.modal.Constructor.prototype.enforceFocus = function() {};
         });
+		
+		
+	$(".prj_dt").change(function() {
+        if($(this).prop('checked')) {
+			$('#from_date').prop('disabled',false);
+			$('#to_date').prop('disabled',false);
+			$('#from_date').val('');
+			$('#to_date').val('');
+          //  alert("Checked Box Selected");
+        } else {
+			$('#from_date').prop('disabled',true);
+			$('#to_date').prop('disabled',true);
+			$('#from_date').val('');
+			$('#to_date').val('');
+           // alert("Checked Box deselect");
+        }
+    });
+		
 		
 		
 $(".dropdown1 dt a").on('click', function() {
@@ -318,17 +391,19 @@ $('.mutliSelect input[type="checkbox"]').on('click', function() {
 							//alert(data);
 							
 							$('#tb_contents').html(data);
-						
-							var fgh =  iframe + '?get_project='+get_prj.slice(0,-1);
+							
+							
+							//console.log($('#brids').val());
+							var fgh =  iframe + '?get_project='+get_prj.slice(0,-1)+'&brid='+$('#brids').val();
 							$('#ifrm1').attr('src', fgh);
 							
-							fgh =  iframe1 + '?get_project='+get_prj.slice(0,-1);
+							fgh =  iframe1 + '?get_project='+get_prj.slice(0,-1)+'&brid='+$('#brids').val();
 							$('#ifrm_cv').attr('src', fgh);
 							
-							fgh =  iframe2 + '?get_project='+get_prj.slice(0,-1);
+							fgh =  iframe2 + '?get_project='+get_prj.slice(0,-1)+'&brid='+$('#brids').val();
 							$('#ifrm_spi').attr('src', fgh);
 							
-							fgh =  iframe3 + '?get_project='+get_prj.slice(0,-1);
+							fgh =  iframe3 + '?get_project='+get_prj.slice(0,-1)+'&brid='+$('#brids').val();
 							$('#ifrm_cpi').attr('src', fgh);
 						
 						

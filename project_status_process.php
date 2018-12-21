@@ -111,35 +111,63 @@
 								
 								<?php
 								
-								if(isset($_GET["dt_f"]) || isset($_GET["dt_t"]) || isset($_GET["get_p"]))
+								if((isset($_GET["dt_f"]) || isset($_GET["dt_t"]) || isset($_GET["get_p"])) && (strlen($_GET["dt_f"])>0 || strlen($_GET["dt_t"])>0 || strlen($_GET["get_p"])>0))
 								{
 									//echo $_GET["dt_f"]."".$_GET["dt_t"]."".$_GET["get_p"];
 									//echo "AMMAN";
 									//exit("Unable to connect to $site");
 									//$query = "SELECT COMBINATION_ID,PRJ_DESC,F1,F2,F3,F4,F5,F6,F7,F8,F9,F10,F11,F12,F13,F14,F15 FROM MMR_BRIEF_MASTER bm LEFT JOIN MMR_OUTPUT_PRJ opr ON bm.prj_id = opr  WHERE prj_id = ''";
-									$query = "SELECT COMBINATION_ID,PRJ_DESC,F1,F2,F3,F4,F5,F6,F7,F8,F9,F10,F11,F12,F13,F14,F15
-											  FROM MMR_OUTPUT_PRJ j LEFT JOIN  MMR_BRIEF_MASTER m ON m.BRID = j.BRID
-											  LEFT JOIN MMR_BRIEF_PROJECT prj ON     m.PRJ_ID = prj.PRJ_ID  
-											  LEFT JOIN 
-											  WHERE m.PRJ_ID IN (".$_GET["get_p"].")  ";
-											//WHERE m.PRJ_ID IN ('".$_GET["get_p"]."') or ( TO_DATE(FR_MN, 'dd/mm/yy') BETWEEN TO_DATE('".$_GET["dt_f"]."', 'dd/mm/yy') AND TO_DATE('".$_GET["dt_t"]."', 'dd/mm/yy'))";
-												
-											  //WHERE m.PRJ_ID IN ('')  OR  ( TO_DATE(PRJ_FRM, 'dd/mm/yy') >= TO_DATE('".$_GET["dt_f"]."', 'dd/mm/yy') AND TO_DATE(PRJ_To, 'dd/mm/yy') <= TO_DATE(,'dd/mm/yy'))";
-											  //WHERE m.PRJ_ID IN (".$_GET["get_p"].")  ";
-											  // WHERE m.PRJ_ID IN (42,24)  AND  ( TO_DATE(PRJ_FRM, 'dd/mm/yy') >= TO_DATE('01/06/2018', 'dd/mm/yy') OR TO_DATE(PRJ_To, 'dd/mm/yy') <= TO_DATE('30/11/2018','dd/mm/yy'));
-											  //PRJ_FRM >= TO_DATE('2014/02/01', 'yyyy/mm/dd') AND PRJ_To <= TO_DATE('2014/02/28','yyyy/mm/dd');
-											  
+								
+
+									if($_GET["dt_f"] == "" && $_GET["dt_t"] == "")
+									{
+												  $query = "SELECT COMBINATION_ID,PRJ_DESC,F1,F2,F3,F4,F5,F6,F7,F8,F9,F10,F11,F12,F13,F14,F15,FR_MN,m.brid
+												  FROM MMR_OUTPUT_PRJ j LEFT JOIN  MMR_BRIEF_MASTER m ON m.BRID = j.BRID
+												  LEFT JOIN MMR_BRIEF_PROJECT prj ON     m.PRJ_ID = prj.PRJ_ID  
+												  WHERE m.PRJ_ID IN (".$_GET["get_p"].")  ";
+												  // WHERE m.PRJ_ID IN ('".$_GET["get_p"]."') or ( TO_DATE(FR_MN, 'dd/mm/yy') BETWEEN TO_DATE('".$_GET["dt_f"]."', 'dd/mm/yy') AND TO_DATE('".$_GET["dt_t"]."', 'dd/mm/yy'))";
+												  // WHERE m.PRJ_ID IN ('')  OR  ( TO_DATE(PRJ_FRM, 'dd/mm/yy') >= TO_DATE('".$_GET["dt_f"]."', 'dd/mm/yy') AND TO_DATE(PRJ_To, 'dd/mm/yy') <= TO_DATE(,'dd/mm/yy'))";
+												  // WHERE m.PRJ_ID IN (".$_GET["get_p"].")  ";
+												  // WHERE m.PRJ_ID IN (42,24)  AND  ( TO_DATE(PRJ_FRM, 'dd/mm/yy') >= TO_DATE('01/06/2018', 'dd/mm/yy') OR TO_DATE(PRJ_To, 'dd/mm/yy') <= TO_DATE('30/11/2018','dd/mm/yy'));
+												  // PRJ_FRM >= TO_DATE('2014/02/01', 'yyyy/mm/dd') AND PRJ_To <= TO_DATE('2014/02/28','yyyy/mm/dd');
+									}
+									else
+									{
+										
+										if(EMPTY($_GET["dt_f"]) || EMPTY($_GET["dt_t"]))
+										{
+											echo '<font color="red">You have selected wrong dates please verify !</font>';
+											die();
+										}
+										
+									  else if($_GET["get_p"] == "")
+									  {
+
+										  $query = "SELECT COMBINATION_ID,PRJ_DESC,F1,F2,F3,F4,F5,F6,F7,F8,F9,F10,F11,F12,F13,F14,F15,FR_MN,m.brid
+										  FROM MMR_OUTPUT_PRJ j LEFT JOIN  MMR_BRIEF_MASTER m ON m.BRID = j.BRID
+										  LEFT JOIN MMR_BRIEF_PROJECT prj ON     m.PRJ_ID = prj.PRJ_ID  
+										  WHERE TO_DATE(m.FR_MN, 'dd/mm/yy') BETWEEN TO_DATE('01/".$_GET["dt_f"]."', 'dd/mm/yy') AND TO_DATE('28/".$_GET["dt_t"]."', 'dd/mm/yy')";
+									  }
+									  else
+									  {
+										  $query = "SELECT COMBINATION_ID,PRJ_DESC,F1,F2,F3,F4,F5,F6,F7,F8,F9,F10,F11,F12,F13,F14,F15,FR_MN,m.brid
+										  FROM MMR_OUTPUT_PRJ j LEFT JOIN  MMR_BRIEF_MASTER m ON m.BRID = j.BRID
+										  LEFT JOIN MMR_BRIEF_PROJECT prj ON     m.PRJ_ID = prj.PRJ_ID  
+										  WHERE m.PRJ_ID IN (".$_GET["get_p"].")  AND TO_DATE(m.FR_MN, 'dd/mm/yy') BETWEEN TO_DATE('01/".$_GET["dt_f"]."', 'dd/mm/yy') AND TO_DATE('28/".$_GET["dt_t"]."', 'dd/mm/yy')";
+									  }
+									}		  
 								}
 								else
 								{
-									$query = "SELECT COMBINATION_ID,PRJ_DESC,F1,F2,F3,F4,F5,F6,F7,F8,F9,F10,F11,F12,F13,F14,F15 FROM MMR_OUTPUT_PRJ";
+									$query = "SELECT COMBINATION_ID,PRJ_DESC,F1,F2,F3,F4,F5,F6,F7,F8,F9,F10,F11,F12,F13,F14,F15,FR_MN,m.brid FROM MMR_OUTPUT_PRJ j LEFT JOIN  MMR_BRIEF_MASTER m ON m.BRID = j.BRID";
 								}
 									
-								$compiled = oci_parse($db, $query);
+									$compiled = oci_parse($db, $query);
 									oci_execute($compiled);
+									$brids = array();
 									while($row=oci_fetch_array($compiled))
 									{	echo "<tr>";
-										echo "<td colspan='2'><a href='#' data-toggle='modal' data-target='#myModal'><img src='img/notifys.jpg' /></a>".$row[1]."</td>";
+										echo "<td colspan='2'>".$row[1]." (<label style='font-size:9px;'>".$row[17]."</label>)</td>";
 										echo "<td style=' background: linear-gradient(to top, #ffffff 11%, #99ccff 104%);'>".$row[2]."</td>";
 										echo "<td style=' background: linear-gradient(to top, #ffffff 11%, #99ccff 104%);'>".$row[3]."</td>";
 										echo "<td style=' background: linear-gradient(to top, #ffffff 11%, #99ccff 104%);'>".$row[4]."</td>";
@@ -154,61 +182,21 @@
 										echo "<td>".$row[13]."</td>";
 										echo "<td>".$row[14]."</td>";
 										echo "<td>".$row[15]."</td>";
-										//echo "<td>".$row[16]."</td>";
-										echo "<td><a href='#'><img src='img/print.png' title='Do you want to print this report.'/></a></td>";
-										
+										echo '<td><a href="JavaScript:newPopup(\'print.php/?brid='.$row[18].'&prj_tle='.$row[1].'<br>'.$row[17].'\');"><img src="img/print.png" title="Do you want to print this report."/></a></td>';
 										echo "</tr>";
+										array_push($brids,$row[18]);				
+									}
+									
 										
-											 //<!-- The modal -->
-				echo '<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="modalLabelLarge" aria-hidden="true">
-						<div class="modal-dialog modal-lg">
-							<div class="modal-content">
-								<div class="modal-header">
-									<h4 class="modal-title" id="modalLabelLarge">Pattern No.</h4>
-								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-									<span aria-hidden="true">&times;</span>
-								</button>
-								</div>
-
-							<div class="modal-body">
-							Features Goes Here........
-							</div>
-
-							</div>
-						</div>
-					</div>';
-										
-										
-									}oci_close($db);
+									oci_close($db);
 								
 								?>
-								
-                                  <!--  <tr>
-                                        <td>
-                                           Budget at Completion (BAC)
-                                        </td>
-                                        <td >122</td>
-                                        <td >145</td>
-                                        <td >255</td>
-                                        <td>201</td>
-                                        <td>321</td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            Schedule Variance (SV)
-                                        </td>
-                                        <td>243</td>
-                                        <td>240</td>
-                                        <td>260</td>
-                                        <td>201</td>
-                                        <td>23</td>
-                                    </tr>-->
-                                   
+								                                   
                                     
                                 </tbody>
                             </table>
 							
-							
+							<input type="hidden" id="brids" name="brids" value="<?php echo implode(',',$brids); ?>">
 							<script>
 							
 							$(document).ready(function() {
@@ -228,4 +216,11 @@
 								});*/
 								
 								$('[data-toggle="tooltip"]').tooltip(); 
+								
+								
+								
+	function newPopup(url) {
+	popupWindow = window.open(
+		url,'popUpWindow','height=800,width=800,left=10,top=10,resizable=yes,scrollbars=yes,toolbar=yes,menubar=no,location=no,directories=no,status=yes')
+}	
 							</script>

@@ -14,9 +14,9 @@ var chart = new CanvasJS.Chart("chartContainer", {
 	axisX:{
          labelFontSize: 10,
 		 labelAngle: 0,
-		 labelMaxWidth: 80,
-		 labelFontWeight: "bold",	//“lighter”, “normal”, “bold” , “bolder” 
-		 //labelAutoFit: true,
+		 labelMaxWidth: 60,
+		 labelFontWeight: "normal",	//“lighter”, “normal”, “bold” , “bolder” 
+		 labelAutoFit: true,
       },
 	axisY: {
 		//title: "Project Forecasting",
@@ -33,19 +33,21 @@ var chart = new CanvasJS.Chart("chartContainer", {
 <?php 		require("../dbconnect.php");	
 	
 	
-			if(isset($_GET["get_project"]))
+			if(isset($_GET["get_project"]) && !EMPTY($_GET["get_project"]))
 			{
-				$query = "SELECT ot.prj_desc,ot.F6 FROM MMR_OUTPUT_PRJ  ot LEFT JOIN MMR_BRIEF_MASTER  bm ON bm.Brid = ot.brid WHERE bm.prj_id IN (".$_GET["get_project"].") ";
+				
+				$query = "SELECT ot.prj_desc,ot.F6, bm.FR_MN  FROM MMR_OUTPUT_PRJ  ot LEFT JOIN MMR_BRIEF_MASTER  bm ON bm.Brid = ot.brid WHERE bm.prj_id IN (".$_GET["get_project"].") AND bm.brid IN (".$_GET["brid"].")  ";
+				
 			}
 			else
 			{
-				$query = "SELECT prj_desc,F6 FROM MMR_OUTPUT_PRJ";
+				$query = "SELECT ot.prj_desc, ot.F6, bm.FR_MN  FROM MMR_OUTPUT_PRJ ot LEFT JOIN MMR_BRIEF_MASTER  bm ON bm.Brid = ot.brid";
 			}
 			$compiled = oci_parse($db, $query);
 			oci_execute($compiled);
 			while($row=oci_fetch_array($compiled))
 			{
-				echo '{ y:'.$row[1].', label:"'. $row[0].'"},';
+				echo '{ y:'.$row[1].', label:"'.$row[0].' ('.$row[2].')"},';
 			
 			} 	oci_close($db);
 ?>

@@ -50,7 +50,11 @@ if(isset($_POST['sub']))
   
 	if (!$error) {
 	
-   $query = "SELECT * FROM MMR_USERS cu WHERE UPPER(cu.USER_NAME) = UPPER('".$name."') AND cu.USER_PASS = '".$pass."' AND  cu.user_Active = '1'";
+   //$query = "SELECT * FROM MMR_USERS cu WHERE UPPER(cu.USER_NAME) = UPPER('".$name."') AND cu.USER_PASS = '".$pass."' AND  cu.user_Active = '1'";
+   
+   	$query = "SELECT cu.USER_NAME,cu.USER_ID,cu.USER_EMAIL,ga.GROUP_ID,ga.OP_CREATE,ga.OP_DEL,ga.OP_EDIT,ga.OP_READ,cu.ROLE 
+				FROM MMR_USERS cu LEFT JOIN CFG_GROUP_ACCESS ga ON cu.USER_ID = ga.USER_ID  
+				WHERE UPPER(cu.USER_NAME) = UPPER('".$name."') AND cu.USER_PASS = '".$pass."' AND cu.MIS_ID = '5'  AND cu.status_id = '1'";
 	
 	//echo $query;
 	//exit;
@@ -72,8 +76,8 @@ if(isset($_POST['sub']))
 			{
 					 $_SESSION['user'] 	 = $row['USER_NAME'];
 					 $_SESSION['userid'] = $row['USER_ID'];
-					 //$_SESSION['groups'] = $row['GROUP_ID'];//OP_CREATE OP_DEL OP_EDIT OP_READ 
-					 //$_SESSION['roles']  = $row['ROLE'];
+					 $_SESSION['groups'] = $row['GROUP_ID'];//OP_CREATE OP_DEL OP_EDIT OP_READ 
+					 $_SESSION['roles']  = $row['ROLE'];
 					 header("Location: index.php");
 			} else {
 					$errMSG = "Incorrect Credentials, Try again...";
@@ -131,8 +135,8 @@ if(isset($_POST['sub']))
     <div class="container">
        
 		 <nav class="navbar-light bg-light" style="opacity: 0.8; border-radius: 25px; border: 2px solid #73AD21;">
-							<form action="#" method="post" class="tm-login-form">
 							
+						<form action="#" method="post" class="tm-login-form">
 							<table align="center">
 									<tr>
 										<td><b>Username :</b></td>
@@ -158,13 +162,13 @@ if(isset($_POST['sub']))
 		   <div class="col-lg-12">
                    
 		   <div class="row" >
-                 <div class="col-lg-4 p-1">
+                 <div class="col-lg-6 p-1">
                     <div class="tm-block h-100"  style="opacity: 0.7;">
                        <!-- <h2 class="tm-block-title">Overview</h2>-->
 						<iframe id="ifrm1" src="graphs/project_chart_SV.php" scrolling="no" style="overflow-y: hidden;" width="100%" height="370px"></iframe>                        
                     </div>
                 </div>
-                <div class="col-lg-4 p-1">
+                <div class="col-lg-6 p-1">
                     <div class="tm-block h-100" style="opacity: 0.7;">
                        <!--  <h2 class="tm-block-title">Project Performance Summary</h2>-->
 						<iframe id="ifrm1" src="graphs/project_chart_CPI.php" scrolling="no" style="overflow-y: hidden;" height="371px" width="100%" ></iframe>
@@ -172,28 +176,18 @@ if(isset($_POST['sub']))
                 </div>
 				
 				
-				  <div class="col-lg-4 p-1">
-                    <div class="tm-block h-100" style="opacity: 0.7;">
-                          <!--  <h2 class="tm-block-title">Project Performance </h2>-->
-							<iframe id="ifrm1" src="graphs/project_chart_CPI.php" scrolling="no" style="overflow-y: hidden;" height="370px" width="100%" ></iframe>
-                    </div>
-                </div>
+			
 				
-			 <div  class="tm-col col-lg-4 p-1">
+			 <div  class="tm-col col-lg-6 p-1">
                 <div class="tm-block h-100" style="opacity: 0.7;">
 				<!-- <h2 class="tm-block-title">Schedule Performance Index</h2>-->
 					<iframe id="ifrm_spi" src="graphs/project_chart_SPI.php" scrolling="no" style="overflow-y: hidden;" height="370px" width="100%"></iframe>
 				</div>
               </div>
 			  
-			   <div class="tm-col col-lg-4 p-1">
-                <div class="tm-block h-100" style="opacity: 0.7;">
-			  			<!-- <h2 class="tm-block-title">Cost Performance Index</h2>-->
-						<iframe id="ifrm_cpi"  src="graphs/project_chart_CPI.php" scrolling="no" style="overflow-y: hidden;" height="370px" width="100%"></iframe>
-				</div>
-              </div>
+			   
 			  
-			   <div class="tm-col col-lg-4 p-1">
+			   <div class="tm-col col-lg-6 p-1">
                 <div class="tm-block h-100" style="opacity: 0.7;">
 			  			<!-- <h2 class="tm-block-title">Cost Performance Index</h2>-->
 						<iframe id="ifrm_cpi" src="graphs/project_chart_CV.php" scrolling="no" style="overflow-y: hidden;" height="370px" width="100%"></iframe>

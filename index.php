@@ -1,4 +1,7 @@
-  <?php
+<?php header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
@@ -41,6 +44,10 @@ if ( !isset($_SESSION['user'])) {
         <div class="container">
             <div class="row">
                 <div class="col-12">
+                   <style>
+				/*.nav-item	{margin: auto; height:100%;}*/
+				.no_wrp	{white-space: nowrap;}
+				</style>
                     <nav class="navbar navbar-expand-xl navbar-light bg-light">
                         <a class="navbar-brand" href="#">
 						
@@ -56,12 +63,12 @@ if ( !isset($_SESSION['user'])) {
                         <div class="collapse navbar-collapse" id="navbarSupportedContent">
                             <ul class="navbar-nav mx-auto">
                                 <li class="nav-item">
-                                    <a class="nav-link active" id="btn1_dashboard" href="#">Dashboard
+                                    <a class="nav-link no_wrp active" id="btn1_dashboard" href="#">Dashboard
                                         <!--<span class="sr-only">(kcurrent)</span>-->
                                     </a>
                                 </li>
                                 <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
+                                    <a class="nav-link no_wrp dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
                                         aria-expanded="false">
                                         Reports
                                     </a>
@@ -76,34 +83,29 @@ if ( !isset($_SESSION['user'])) {
                                     <a class="nav-link" id="btn1_welcome" href="#">Project Monitoring</a>
                                 </li>-->
 
-                                <li class="nav-item">
-                                    <a class="nav-link" id="btn1_account" href="#">Accounts</a>
-                                </li>
+                               
                                 <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle nw_prj" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
+                                    <a class="nav-link no_wrp dropdown-toggle nw_prj" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
                                         aria-expanded="false">
                                         Project Settings
                                     </a>
                                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                         <a class="dropdown-item" id="configurations">Project Progress</a>
-                                        <a class="dropdown-item" id="new_project">New Project</a>
-                                       <!-- <a class="dropdown-item" href="#">Add Features</a>
-										<a class="dropdown-item" href="#">Add Clients</a>-->
+										<a class="dropdown-item" id="new_project">New Project</a>										
+										<a class="dropdown-item" id="add_user">Add Users</a>
+										<a class="dropdown-item" id="add_clnt_conslt">Add Clients / Consultants</a>
                                     </div>
                                 </li>
 								
 								
 								
-                            </ul>
-                            <ul class="navbar-nav">
+                            
 								<li class="nav-item">	
-										<br /><u>
-											<a id="btn1_account" href="#"><span><?php echo($_SESSION['user']); ?> is logged In</span></a>
-										</u>
+											<a id="btn1_account" class="nav-link no_wrp" href="#"><kbd class="btn-danger"><?php echo($_SESSION['user']); ?></kbd> is logged In</a>
                                 </li>
 								
                                 <li class="nav-item">
-                                    <a class="nav-link d-flex" href="logout.php">
+                                    <a class="nav-link no_wrp d-flex" href="logout.php">
                                         <i class="far fa-user mr-2 tm-logout-icon"></i>
                                         <span>Logout</span>
                                     </a>
@@ -155,7 +157,8 @@ if ( !isset($_SESSION['user'])) {
 	<script>
     $(document).ready(function() {
 		
-		$("#main-content").load('dashboard.php');
+		$("#main-content").html('<div class="tm-col col-12"><div class="bg-white tm-block h-100"><center><img src="img/loader.gif"></center></div></div>');
+			$("#main-content").load('dashboard.php');
 		
 			$('#btn1_dashboard').addClass("active");
 			$('#btn1_welcome').removeClass("active");
@@ -163,8 +166,11 @@ if ( !isset($_SESSION['user'])) {
 			$('.nw_prj').removeClass("active");
 			$('#configurations').removeClass("active");
 			$('#new_project').removeClass("active");
+			$('#add_user').removeClass("active");
+			$('#add_clnt_conslt').removeClass("active");
 		
 		$('#btn1_dashboard').click(function() {
+			$("#main-content").html('<div class="tm-col col-12"><div class="bg-white tm-block h-100"><center><img src="img/loader.gif"></center></div></div>');
 			$("#main-content").load('dashboard.php');
 			$('#btn1_dashboard').addClass("active");
 			$('#btn1_welcome').removeClass("active");
@@ -172,11 +178,14 @@ if ( !isset($_SESSION['user'])) {
 			$('.nw_prj').removeClass("active");
 			$('#configurations').removeClass("active");
 			$('#new_project').removeClass("active");
+			$('#add_user').removeClass("active");
+			$('#add_clnt_conslt').removeClass("active");
 			
 			
 		});
 		
 		$('#btn1_welcome').click(function() {
+			$("#main-content").html('<div class="tm-col col-12"><div class="bg-white tm-block h-100"><center><img src="img/loader.gif"></center></div></div>');
 			$("#main-content").load('project_status.php');
 			$('#btn1_dashboard').removeClass("active");
 			$('#btn1_account').removeClass("active");
@@ -184,9 +193,12 @@ if ( !isset($_SESSION['user'])) {
 			$('.nw_prj').removeClass("active");
 			$('#configurations').removeClass("active");
 			$('#new_project').removeClass("active");
+			$('#add_user').removeClass("active");
+			$('#add_clnt_conslt').removeClass("active");
 		});
 		
 		$('#btn1_account').click(function() {
+			$("#main-content").html('<div class="tm-col col-12"><div class="bg-white tm-block h-100"><center><img src="img/loader.gif"></center></div></div>');
 			$("#main-content").load('accounts.php');
 			$('#btn1_dashboard').removeClass("active");
 			$('#btn1_welcome').removeClass("active");
@@ -194,20 +206,26 @@ if ( !isset($_SESSION['user'])) {
 			$('.nw_prj').removeClass("active");
 			$('#configurations').removeClass("active");
 			$('#new_project').removeClass("active");
+			$('#add_user').removeClass("active");
+			$('#add_clnt_conslt').removeClass("active");
 			
 		});
 		
 		$('#configurations').click(function() {
+			$("#main-content").html('<div class="tm-col col-12"><div class="bg-white tm-block h-100"><center><img src="img/loader.gif"></center></div></div>');
 			$("#main-content").load('configurations.php');
 			$('#btn1_dashboard').removeClass("active");
 			$('#btn1_welcome').removeClass("active");
 			$('#btn1_account').removeClass("active");
 			$('.nw_prj').addClass("active");
 			$('#configurations').addClass("active");
-			$('#new_project').removeClass("active");			
+			$('#new_project').removeClass("active");	
+			$('#add_user').removeClass("active");
+			$('#add_clnt_conslt').removeClass("active");			
 		});
 		
 		$('#new_project').click(function() {
+			$("#main-content").html('<div class="tm-col col-12"><div class="bg-white tm-block h-100"><center><img src="img/loader.gif"></center></div></div>');
 			$("#main-content").load('add_project.php');
 			$('#btn1_dashboard').removeClass("active");
 			$('#btn1_welcome').removeClass("active");
@@ -215,7 +233,39 @@ if ( !isset($_SESSION['user'])) {
 			$('#configurations').removeClass("active");
 			$('#new_project').addClass("active");	
 			$('.nw_prj').addClass("active");
+			$('#add_user').removeClass("active");
+			$('#add_clnt_conslt').removeClass("active");
 		});
+		
+		$('#add_user').click(function() {
+			$("#main-content").html('<div class="tm-col col-12"><div class="bg-white tm-block h-100"><center><img src="img/loader.gif"></center></div></div>');
+			$("#main-content").load('add_users.php');
+			$('#btn1_dashboard').removeClass("active");
+			$('#btn1_welcome').removeClass("active");
+			$('#btn1_account').removeClass("active");
+			$('#configurations').removeClass("active");
+			$('#new_project').removeClass("active");
+			$('#add_user').addClass("active");
+			$('#add_clnt_conslt').removeClass("active");				
+			
+			//$('.nw_prj').removeClass("active");
+		});
+		
+		$('#add_clnt_conslt').click(function() {
+			$("#main-content").html('<div class="tm-col col-12"><div class="bg-white tm-block h-100"><center><img src="img/loader.gif"></center></div></div>');
+			$("#main-content").load('ad_client_conslt.php');
+			$('#btn1_dashboard').removeClass("active");
+			$('#btn1_welcome').removeClass("active");
+			$('#btn1_account').removeClass("active");
+			$('#configurations').removeClass("active");
+			$('#new_project').removeClass("active");
+			$('#add_user').removeClass("active");			
+			$('#add_clnt_conslt').addClass("active");			
+			
+			//$('.nw_prj').removeClass("active");
+		});
+		
+		
 		
 		
 		
